@@ -4,21 +4,19 @@ mod handlers;
 use clap::Parser;
 use cli::Commands;
 
-/* @todo Add proper error handling */
-
-pub fn handle_commands(commands: &Option<Commands>) -> Result<(), Box<dyn std::error::Error>> {
+pub fn handle_commands(commands: &Option<Commands>) -> Result<(), std::io::Error> {
     match commands {
         Some(Commands::Add { key, path }) => {
             handlers::add_template(key, path)?
         }
-        Some(Commands::Remove { key, path }) => {
-            println!("Chose to remove key {key} at path {:?}", path)
+        Some(Commands::Update { key, path }) => {
+            handlers::update_template(key, path)?
         }
-        Some(Commands::Create { key, path }) => {
-            println!("Chose to create key {key} at path {:?}", path)
+        Some(Commands::Remove { key }) => {
+            handlers::remove_template(key)?
         }
         Some(Commands::List) => {
-            println!("Listing all available templates...")
+            handlers::list_templates()?
         }
         None => {
             println!("No subcommand chosen!")
@@ -27,7 +25,7 @@ pub fn handle_commands(commands: &Option<Commands>) -> Result<(), Box<dyn std::e
 
     Ok(())
 }
-fn main() {
+fn main() -> Result<(), std::io::Error> {
     let cli = cli::Cli::parse();
-    handle_commands(&cli.command).expect("Could not perform task.");
+    handle_commands(&cli.command)
 }

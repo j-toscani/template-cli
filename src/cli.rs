@@ -11,9 +11,9 @@ pub struct Cli {
 
 #[derive(Subcommand)]
 pub enum Commands {
+    Update { key: String, path: PathBuf },
+    Remove { key: String },
     Add { key: String, path: PathBuf },
-    Remove { key: String, path: PathBuf },
-    Create { key: String, path: PathBuf },
     List
 }
 
